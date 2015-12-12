@@ -1,0 +1,18 @@
+household_power_consumption <- read.csv("household_power_consumption.txt", header=TRUE, sep=";")
+head(household_power_consumption)
+data <- subset(household_power_consumption, Date == "1/2/2007" | Date == "2/2/2007")
+install.packages("lubridate")
+library(lubridate)
+data$datetime <- dmy_hms(paste(data$Date , data$Time))
+data$Sub_metering_1 <- as.numeric(as.character(data$Sub_metering_1))
+data$Sub_metering_2 <- as.numeric(as.character(data$Sub_metering_2))
+data$Sub_metering_3 <- as.numeric(as.character(data$Sub_metering_3))
+par(mfrow = c(1,1))
+plot(data$datetime ,data$Sub_metering_1 , "lines" , xlab = "" , ylab = "Energy sub metering")
+lines(data$datetime ,data$Sub_metering_2 , col = "orange")
+lines(data$datetime ,data$Sub_metering_3 , col = "blue")
+legend("topright" , legend = c("Sub_metering_1", "Sub_metering_2" , "Sub_metering_3") ,
+       lty = c(1,1,1) , col =c("black" ,"orange" ,"blue"),cex = 0.7 , adj = 0.15 , y.intersp = 0.4)
+dev.copy(png,filename = "plot3.png" , width = 480 , height = 480)
+dev.off()
+
